@@ -18,6 +18,8 @@
 		6185953E17BE57E5007FB048 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6185953D17BE57E5007FB048 /* Default-568h@2x.png */; };
 		6185954117BE57E5007FB048 /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6185953F17BE57E5007FB048 /* MainStoryboard.storyboard */; };
 		6185954417BE57E5007FB048 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6185954317BE57E5007FB048 /* ViewController.m */; };
+		6185954B17BE58B3007FB048 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6185954A17BE58B3007FB048 /* QuartzCore.framework */; };
+		6185954E17BE58F3007FB048 /* ColorButtons.m in Sources */ = {isa = PBXBuildFile; fileRef = 6185954D17BE58F3007FB048 /* ColorButtons.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -37,6 +39,10 @@
 		6185954017BE57E5007FB048 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard.storyboard; sourceTree = "<group>"; };
 		6185954217BE57E5007FB048 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		6185954317BE57E5007FB048 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		6185954A17BE58B3007FB048 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		6185954C17BE58F3007FB048 /* ColorButtons.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ColorButtons.h; path = ../ColorButtons.h; sourceTree = "<group>"; };
+		6185954D17BE58F3007FB048 /* ColorButtons.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ColorButtons.m; path = ../ColorButtons.m; sourceTree = "<group>"; };
+		6185954F17BE5963007FB048 /* ClickDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ClickDelegate.h; path = ../ClickDelegate.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -44,6 +50,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6185954B17BE58B3007FB048 /* QuartzCore.framework in Frameworks */,
 				6185952817BE57E4007FB048 /* UIKit.framework in Frameworks */,
 				6185952A17BE57E4007FB048 /* Foundation.framework in Frameworks */,
 				6185952C17BE57E4007FB048 /* CoreGraphics.framework in Frameworks */,
@@ -73,6 +80,7 @@
 		6185952617BE57E4007FB048 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				6185954A17BE58B3007FB048 /* QuartzCore.framework */,
 				6185952717BE57E4007FB048 /* UIKit.framework */,
 				6185952917BE57E4007FB048 /* Foundation.framework */,
 				6185952B17BE57E4007FB048 /* CoreGraphics.framework */,
@@ -88,6 +96,9 @@
 				6185953F17BE57E5007FB048 /* MainStoryboard.storyboard */,
 				6185954217BE57E5007FB048 /* ViewController.h */,
 				6185954317BE57E5007FB048 /* ViewController.m */,
+				6185954C17BE58F3007FB048 /* ColorButtons.h */,
+				6185954D17BE58F3007FB048 /* ColorButtons.m */,
+				6185954F17BE5963007FB048 /* ClickDelegate.h */,
 				6185952E17BE57E4007FB048 /* Supporting Files */,
 			);
 			path = "NickOfTime-PressTheButton-Game2";
@@ -176,6 +187,7 @@
 				6185953417BE57E5007FB048 /* main.m in Sources */,
 				6185953817BE57E5007FB048 /* AppDelegate.m in Sources */,
 				6185954417BE57E5007FB048 /* ViewController.m in Sources */,
+				6185954E17BE58F3007FB048 /* ColorButtons.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

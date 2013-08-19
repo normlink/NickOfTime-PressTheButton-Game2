@@ -7,7 +7,10 @@
 //
 
 #import <Foundation/Foundation.h>
+@class ColorButtons;
 
 @protocol ClickDelegate <NSObject>
+
+-(void) didClickGame2View: (ColorButtons *) thisView;
 
 @end
