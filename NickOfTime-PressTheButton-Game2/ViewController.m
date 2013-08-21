@@ -10,7 +10,7 @@
 #import "ViewController.h"
 
 @interface ViewController ()
-{
+{   
     int gameCounter;
     UIColor *color1;
     UIColor *color2;
@@ -24,9 +24,13 @@
     UIColor *black;
     NSArray *colorArray;
     NSMutableArray *randomColorArray;
+    NSMutableArray *playColorArray;
     __weak IBOutlet UILabel *notificationLabel;
     
 }
+
+@property (nonatomic, strong) NSTimer *shuffleTimer;
+
 - (IBAction)startDemoGame2:(id)sender;
 
 @end
@@ -48,11 +52,11 @@
     colorArray = @[color1,color2,color3,color4,color5,color6,color7,color8,color9];
     
     [super viewDidLoad];
-	
+    
     for (UIView * subview in self.view.subviews){
         if ([subview isKindOfClass:[ColorButtons class]]) {
             ColorButtons * colorButton = (ColorButtons *) subview;
-            colorButton.pressButtonsDelegate = self;
+            //colorButton.pressButtonsDelegate = self;
         }}
 }
 
@@ -63,18 +67,23 @@
 }
 - (IBAction)startDemoGame2:(id)sender
 {
+    if ([self.shuffleTimer isValid]) {
+        [self.shuffleTimer invalidate];}
     gameCounter = 0;
     //playColorArray = [[NSMutableArray alloc] initWithArray:colorArray];
     for (UIView * subview in self.view.subviews){
         if ([subview isKindOfClass:[ColorButtons class]]){
             [subview setAlpha:1.0];
             ColorButtons *view = (ColorButtons*) subview;
+            UILongPressGestureRecognizer *longPressGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(tapGestureWasTapped:)];
+            longPressGesture.minimumPressDuration = 0.0f;
+            [view addGestureRecognizer:longPressGesture];
             view.layer.borderWidth = 2;
             view.layer.cornerRadius = 40;
             [UIView animateWithDuration:0.0 animations:^{
                 subview.transform = CGAffineTransformScale(subview.transform, 0.01, 0.01);
                 
-            }]; 
+            }];
         }}
     notificationLabel.text = @"Extinguish all the lights";
     NSMutableArray* gameColorArray = [[NSMutableArray alloc] initWithArray:colorArray];
@@ -91,9 +100,9 @@
             if ([subview isKindOfClass:[ColorButtons class]]){
                 if (subview.tag == counter){
                     subview.backgroundColor = randomColorArray[counter];
-                   [UIView animateWithDuration:1.0 animations:^{
+                    [UIView animateWithDuration:1.0 animations:^{
                         subview.transform = CGAffineTransformScale(subview.transform, 100, 100);
-                    }]; 
+                    }];
                     
                 }
             }
@@ -101,62 +110,92 @@
     }
 }
 
+-(void)tapGestureWasTapped:(UILongPressGestureRecognizer *)longPressGesture {
+    ColorButtons *colorButton = (ColorButtons *)longPressGesture.view;
+    if (longPressGesture.state == UIGestureRecognizerStateBegan) {
+        [self stopShufflingLights];
+        [self didClickGame2View:colorButton];
+    }
+    else if (longPressGesture.state == UIGestureRecognizerStateEnded) {
+        [self performSelector:@selector(startShufflingLights) withObject:nil afterDelay:0.6];
+    }
+}
+
 -(void) didClickGame2View: (ColorButtons *) thisView
 {
-    for (UIView * subview in self.view.subviews){
-            if ([subview isKindOfClass:[ColorButtons class]]){
-                [subview.layer removeAllAnimations];}}
     if (thisView.backgroundColor != black) {
-        //thisView.backgroundColor = black;
-        [randomColorArray replaceObjectAtIndex:thisView.tag withObject:black];
         gameCounter++;
+        
         
         if (gameCounter == colorArray.count) {
             notificationLabel.text = @"Winner, winner!";
-
-            
-            
-        }//Add for continuous shuffle
-        else{
-            [self shuffleLights];
         }
-    }//comment out all below and use shuffle lights method for continuous shuffle
-    //NSMutableArray *playColorArray = [[NSMutableArray alloc] initWithArray:randomColorArray];
-    for (NSInteger i = randomColorArray.count-1; i > 0; i--)
-    {
-        [randomColorArray exchangeObjectAtIndex:i withObjectAtIndex:arc4random_uniform(i+1)];
-    }
-    //NSLog(@"%@,%@", playColorArray[0], playColorArray[8]);
-    for (UIView * subview in self.view.subviews){
-        for (int counter = 0; counter < [colorArray count]; counter++) {
-            if ([subview isKindOfClass:[ColorButtons class]]){
-                if (subview.tag == counter){
-                    subview.backgroundColor = randomColorArray[counter];
-                }}}}
-    
-}
--(void)shuffleLights
-{
-    
-    [UIView animateWithDuration:0.0 delay:0.5 options:0 animations:^{
-        NSMutableArray *playColorArray = [[NSMutableArray alloc] initWithArray:randomColorArray];
+        
+            
+        //Add for continuous shuffle
+        
+        playColorArray = [[NSMutableArray alloc] initWithArray:randomColorArray];
+        [randomColorArray replaceObjectAtIndex:thisView.tag withObject:black];
+        [playColorArray removeObjectAtIndex:thisView.tag];
+        
+        
         for (NSInteger i = playColorArray.count-1; i > 0; i--)
         {
             [playColorArray exchangeObjectAtIndex:i withObjectAtIndex:arc4random_uniform(i+1)];
         }
+        [playColorArray insertObject:black atIndex:thisView.tag];
+        
         //NSLog(@"%@,%@", playColorArray[0], playColorArray[8]);
         for (UIView * subview in self.view.subviews){
             for (int counter = 0; counter < [colorArray count]; counter++) {
                 if ([subview isKindOfClass:[ColorButtons class]]){
                     if (subview.tag == counter){
                         subview.backgroundColor = playColorArray[counter];
+                        NSLog(@"%@, %i F", playColorArray[counter], counter);
                     }}}}
         
-    }completion:^(BOOL finished) {
-        [self shuffleLights];
-    }];
+        randomColorArray = playColorArray;
+    }
     
+    
+//    else{
+//        [self performSelector:@selector(startShufflingLights) withObject:nil afterDelay:0.6];
+//        //[self startShufflingLights];
+//    }
+    
+    //comment out all below and use shuffle lights method for continuous shuffle
+    //NSMutableArray *playColorArray = [[NSMutableArray alloc] initWithArray:randomColorArray];
+    
+    
+}
 
+-(void)startShufflingLights {
+    if ([self.shuffleTimer isValid]) {
+        return;
+    }
+    self.shuffleTimer = [NSTimer scheduledTimerWithTimeInterval:0.9f target:self selector:@selector(shuffleLights) userInfo:nil repeats:YES];
+    [[NSRunLoop currentRunLoop] addTimer:self.shuffleTimer forMode:NSRunLoopCommonModes];
+    [self.shuffleTimer fire];
+}
+
+-(void) stopShufflingLights {
+    [self.shuffleTimer invalidate];
+}
+
+-(void)shuffleLights
+{
+    //NSMutableArray *playColorArray = [[NSMutableArray alloc] initWithArray:randomColorArray];
+    for (NSInteger i = playColorArray.count-1; i > 0; i--)
+    {
+        [playColorArray exchangeObjectAtIndex:i withObjectAtIndex:arc4random_uniform(i+1)];
+    }
+    //NSLog(@"%@,%@", playColorArray[0], playColorArray[8]);
+    for (UIView * subview in self.view.subviews){
+        for (int counter = 0; counter < [colorArray count]; counter++) {
+            if ([subview isKindOfClass:[ColorButtons class]]){
+                if (subview.tag == counter){
+                    subview.backgroundColor = playColorArray[counter];
+                }}}}
 }
 
 @end
