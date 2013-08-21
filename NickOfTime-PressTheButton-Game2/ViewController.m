@@ -24,6 +24,7 @@
     UIColor *black;
     NSArray *colorArray;
     NSMutableArray *randomColorArray;
+    NSMutableArray *playColorArray;
     __weak IBOutlet UILabel *notificationLabel;
     
 }
@@ -86,7 +87,7 @@
         //int altCounter = arc4random()%(3-num);
         [randomColorArray addObject:gameColorArray[colorCounter]];
         [gameColorArray removeObjectAtIndex:colorCounter];
-        NSLog(@" playcolorarray %lu",(unsigned long)[randomColorArray count]);
+        //NSLog(@" randomcolorarray %lu",(unsigned long)[randomColorArray count]);
     }
     for (UIView * subview in self.view.subviews){
         for (int counter = 0; counter < [colorArray count]; counter++) {
@@ -107,33 +108,42 @@
 {
     if (thisView.backgroundColor != black) {
         //thisView.backgroundColor = black;
+        playColorArray = [[NSMutableArray alloc] initWithArray:randomColorArray];
         [randomColorArray replaceObjectAtIndex:thisView.tag withObject:black];
+        [playColorArray removeObjectAtIndex:thisView.tag];
         gameCounter++;
         
         if (gameCounter == colorArray.count) {
             notificationLabel.text = @"Winner, winner!";
-
-            
-            
-        }//Add for continuous shuffle
-//        else{
-//            [self shuffleLights];
-//        }
-    }//comment out all below and use shuffle lights method for continuous shuffle
-    //NSMutableArray *playColorArray = [[NSMutableArray alloc] initWithArray:randomColorArray];
-    for (NSInteger i = randomColorArray.count-1; i > 0; i--)
-    {
-        [randomColorArray exchangeObjectAtIndex:i withObjectAtIndex:arc4random_uniform(i+1)];
+        }
+        
+        
+        
+        //Add for continuous shuffle
+        //        else{
+        //            [self shuffleLights];
+        //        }
+        //comment out all below and use shuffle lights method for continuous shuffle
+        //NSMutableArray *playColorArray = [[NSMutableArray alloc] initWithArray:randomColorArray];
+        
+        for (NSInteger i = playColorArray.count-1; i > 0; i--)
+        {
+            [playColorArray exchangeObjectAtIndex:i withObjectAtIndex:arc4random_uniform(i+1)];
+            NSLog(@"%@, %i X", playColorArray[i], i);
+        }
+        [playColorArray insertObject:black atIndex:thisView.tag];
+        
+        //NSLog(@"%@,%@", playColorArray[0], playColorArray[8]);
+        for (UIView * subview in self.view.subviews){
+            for (int counter = 0; counter < [colorArray count]; counter++) {
+                if ([subview isKindOfClass:[ColorButtons class]]){
+                    if (subview.tag == counter){
+                        subview.backgroundColor = playColorArray[counter];
+                        NSLog(@"%@, %i F", playColorArray[counter], counter);
+                    }}}}
     }
-    //NSLog(@"%@,%@", playColorArray[0], playColorArray[8]);
-    for (UIView * subview in self.view.subviews){
-        for (int counter = 0; counter < [colorArray count]; counter++) {
-            if ([subview isKindOfClass:[ColorButtons class]]){
-                if (subview.tag == counter){
-                    subview.backgroundColor = randomColorArray[counter];
-                }}}}
-    
-            }
+    randomColorArray = playColorArray;
+}
 //-(void)shuffleLights
 //{
 //    if (self.shouldAnimate == YES) {
