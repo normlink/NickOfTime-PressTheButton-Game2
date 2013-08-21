@@ -20,10 +20,10 @@
     }
     return self;
 }
-//-(void) touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
-//{
-//    [pressButtonsDelegate didClickGame2View:self];
-//}
+-(void) touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    [pressButtonsDelegate didClickGame2View:self];
+}
 /*
 // Only override drawRect: if you perform custom drawing.
 // An empty implementation adversely affects performance during animation.
