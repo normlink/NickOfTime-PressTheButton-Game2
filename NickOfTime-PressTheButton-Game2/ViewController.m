@@ -35,7 +35,8 @@
     ColorButtons *button9;
     ColorButtons *button10;
     NSArray *colorArray;
-    NSArray *buttonArray;
+    NSMutableArray *buttonArray;
+    NSMutableArray *frameArray;
     NSMutableArray *randomColorArray;
     NSMutableArray *playColorArray;
     __weak IBOutlet UILabel *notificationLabel;
@@ -77,7 +78,7 @@
     //CGPoint center = CGPointMake(CGRectGetMidX(self.view.frame), CGRectGetMidY(self.view.frame));
     CGPoint center = self.view.center;
     button1 = [[UIView alloc] initWithFrame: CGRectMake(center.x - 30, center.y - 20-30,70,70)];
-   [self.view addSubview:button1];
+   //[self.view addSubview:button1];
     //button1.backgroundColor = color1;
     //button1.center = self.view.center;
    [button1 setCenter: self.view.center];
@@ -91,10 +92,22 @@
     button8 = [[ColorButtons alloc] initWithFrame: CGRectOffset(button1.frame, distance* cosf(7*(2*M_PI)/9), distance* sinf(7*(2*M_PI)/9))];
     button9 = [[ColorButtons alloc] initWithFrame: CGRectOffset(button1.frame, distance* cosf(8*(2*M_PI)/9), distance* sinf(8*(2*M_PI)/9))];
     button10 = [[ColorButtons alloc] initWithFrame: CGRectOffset(button1.frame, distance* cosf(9*(2*M_PI)/9), distance* sinf(9*(2*M_PI)/9))];
-    [self.view addSubview:button10];
-    //button10.backgroundColor = color10;
+
+//    button2.frame = CGRectOffset(button1.frame, distance* cosf(1*(2*M_PI)/9), distance* sinf(1*(2*M_PI)/9));
+//    button3.frame = CGRectOffset(button1.frame, distance* cosf(2*(2*M_PI)/9), distance* sinf(2*(2*M_PI)/9));
+//    button4.frame = CGRectOffset(button1.frame, distance* cosf(3*(2*M_PI)/9), distance* sinf(3*(2*M_PI)/9));
+//    button5.frame = CGRectOffset(button1.frame, distance* cosf(4*(2*M_PI)/9), distance* sinf(4*(2*M_PI)/9));
+//    button6.frame = CGRectOffset(button1.frame, distance* cosf(5*(2*M_PI)/9), distance* sinf(5*(2*M_PI)/9));
+//    button7.frame = CGRectOffset(button1.frame, distance* cosf(6*(2*M_PI)/9), distance* sinf(6*(2*M_PI)/9));
+//    button8.frame = CGRectOffset(button1.frame, distance* cosf(7*(2*M_PI)/9), distance* sinf(7*(2*M_PI)/9));
+//    button9.frame = CGRectOffset(button1.frame, distance* cosf(8*(2*M_PI)/9), distance* sinf(8*(2*M_PI)/9));
+//    button10.frame = CGRectOffset(button1.frame, distance* cosf(9*(2*M_PI)/9), distance* sinf(9*(2*M_PI)/9));
     
-    buttonArray = [[NSArray alloc] initWithObjects:button2, button3, button4, button5, button6, button7, button8, button9, button10, nil];
+    //frameArray = @[CGRectCreateDictionaryRepresentation(button8.frame)];
+    frameArray = [[NSMutableArray alloc] initWithObjects:[NSValue valueWithCGRect:button2.frame], [NSValue valueWithCGRect:button3.frame], [NSValue valueWithCGRect:button4.frame], [NSValue valueWithCGRect:button5.frame], [NSValue valueWithCGRect:button6.frame], [NSValue valueWithCGRect:button7.frame], [NSValue valueWithCGRect:button8.frame], [NSValue valueWithCGRect:button9.frame], [NSValue valueWithCGRect:button10.frame], nil];
+    NSLog(@"count %lu", (unsigned long)frameArray.count);
+    
+    buttonArray = [[NSMutableArray alloc] initWithObjects:button2, button3, button4, button5, button6, button7, button8, button9, button10, nil];
     
 //    NSLog(@"x%f, y%f", center.x, center.y);
     //ColorButtons *button1 = [[ColorButtons alloc] initWithFrame: CGRectMake (CGRectGetMidX(self.view.frame),CGRectGetMidY(self.view.frame),60,60)];
@@ -135,6 +148,7 @@
 {
     gameCounter = 0;
     //playColorArray = [[NSMutableArray alloc] initWithArray:colorArray];
+    int frameElement = 0;
     for (UIView * subview in self.view.subviews){
         if ([subview isKindOfClass:[ColorButtons class]]){
             [subview setAlpha:1.0];
@@ -149,21 +163,27 @@
                 //button4.frame = CGRectOffset(button1.frame, distance * cosf(3*(2*M_PI)/9), distance * sinf(3*(2*M_PI)/9));
             }completion:^(BOOL finished) {
                 [UIView animateWithDuration:1.0 animations:^{
-                    //subview.transform = CGAffineTransformScale(subview.transform, 100, 100);
-                    button4.frame = CGRectOffset(button1.frame, distance * cosf(3*(2*M_PI)/9), distance * sinf(3*(2*M_PI)/9));
-                    button2.frame = CGRectOffset(button1.frame, distance* cosf(1*(2*M_PI)/9), distance* sinf(1*(2*M_PI)/9));
-                    button3.frame = CGRectOffset(button1.frame, distance* cosf(2*(2*M_PI)/9), distance* sinf(2*(2*M_PI)/9));
-                    button4.frame = CGRectOffset(button1.frame, distance * cosf(3*(2*M_PI)/9), distance * sinf(3*(2*M_PI)/9));
-                    button5.frame = CGRectOffset(button1.frame, distance* cosf(4*(2*M_PI)/9), distance* sinf(4*(2*M_PI)/9));
-                    button6.frame = CGRectOffset(button1.frame, distance* cosf(5*(2*M_PI)/9), distance* sinf(5*(2*M_PI)/9));
-                    button7.frame = CGRectOffset(button1.frame, distance* cosf(6*(2*M_PI)/9), distance* sinf(6*(2*M_PI)/9));
-                    button8.frame = CGRectOffset(button1.frame, distance* cosf(7*(2*M_PI)/9), distance* sinf(7*(2*M_PI)/9));
-                    button9.frame = CGRectOffset(button1.frame, distance* cosf(8*(2*M_PI)/9), distance* sinf(8*(2*M_PI)/9));
-                    button10.frame = CGRectOffset(button1.frame, distance* cosf(9*(2*M_PI)/9), distance* sinf(9*(2*M_PI)/9));
+                    subview.frame = [frameArray[frameElement] CGRectValue];
+//                    //subview.transform = CGAffineTransformScale(subview.transform, 100, 100);
+//                    //button2.frame = [((ColorButtons *)buttonArray[0]) frame];
+//                    //button3.frame = [((ColorButtons *)buttonArray[1]) frame];
+//                    button2.frame = [frameArray[0] CGRectValue];
+//                    button3.frame = [frameArray[1] CGRectValue];
+//                    //button3.frame = [[((ColorButtons *)buttonArray[1]).frame] CGRectValue];
+//                    //button2.frame = CGRectOffset(button1.frame, distance* cosf(1*(2*M_PI)/9), distance* sinf(1*(2*M_PI)/9));
+//                    //button3.frame = CGRectOffset(button1.frame, distance* cosf(2*(2*M_PI)/9), distance* sinf(2*(2*M_PI)/9));
+//                    button4.frame = CGRectOffset(button1.frame, distance * cosf(3*(2*M_PI)/9), distance * sinf(3*(2*M_PI)/9));
+//                    button5.frame = CGRectOffset(button1.frame, distance* cosf(4*(2*M_PI)/9), distance* sinf(4*(2*M_PI)/9));
+//                    button6.frame = CGRectOffset(button1.frame, distance* cosf(5*(2*M_PI)/9), distance* sinf(5*(2*M_PI)/9));
+//                    button7.frame = CGRectOffset(button1.frame, distance* cosf(6*(2*M_PI)/9), distance* sinf(6*(2*M_PI)/9));
+//                    button8.frame = CGRectOffset(button1.frame, distance* cosf(7*(2*M_PI)/9), distance* sinf(7*(2*M_PI)/9));
+//                    button9.frame = CGRectOffset(button1.frame, distance* cosf(8*(2*M_PI)/9), distance* sinf(8*(2*M_PI)/9));
+//                    button10.frame = CGRectOffset(button1.frame, distance* cosf(9*(2*M_PI)/9), distance* sinf(9*(2*M_PI)/9));
                 
                                     }];
                  }];
-            }
+            frameElement++;
+        }
         }
     notificationLabel.text = @"Extinguish all the lights";
 //    NSMutableArray* gameColorArray = [[NSMutableArray alloc] initWithArray:colorArray];
