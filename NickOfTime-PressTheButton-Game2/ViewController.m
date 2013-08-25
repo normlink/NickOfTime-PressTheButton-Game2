@@ -45,7 +45,7 @@
     CGRect frame7;
     CGRect frame8;
     CGRect frame9;
-    NSArray *colorArray;
+    NSMutableArray *colorArray;
     NSArray *buttonArray;
     NSArray *frameArray;
     NSMutableArray *playButtonArray;
@@ -83,7 +83,8 @@
 //    color8 = [UIColor colorWithRed:112/255.0f green:219/255.0f blue:219/255.0f alpha:1.0];
 //    color10 =[UIColor colorWithRed:89/255.0f green:113/255.0f blue:173/255.0f alpha:1.0];
     black = [UIColor blackColor];
-    colorArray = @[color1,color2,color3,color4,color5,color6,color7,color8,color9];
+    colorArray = [[NSMutableArray alloc] initWithObjects:color1,color2,color3,color4,color5,color6,color7,color8,color9, nil];
+  
     offset = 105;
     frameSize = 70;
     spin = 0;
@@ -177,6 +178,10 @@
     gameCounter = 0;
     playButtonArray = [[NSMutableArray alloc] initWithArray:buttonArray];
     playFrameArray = [[NSMutableArray alloc] initWithArray:frameArray];
+    for (NSInteger i = colorArray.count-1; i > 0; i--)
+    {
+        [colorArray exchangeObjectAtIndex:i withObjectAtIndex:arc4random_uniform(i+1)];
+    }
     int frameElement = 0;
     for (UIView * subview in self.view.subviews){
         if ([subview isKindOfClass:[ColorButtons class]]){
