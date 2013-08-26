@@ -309,6 +309,7 @@
                 }
             }];
         }];
+        [self.view sendSubviewToBack:thisView];
     }
 }
 
